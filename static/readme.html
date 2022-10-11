@@ -1,1 +1,37 @@
-<h1>kasv</h1>
+<h1>Sender selector</h1>
+
+<p>webapp to choose the best data sender</p>
+
+<h2>Parameters analyzed:</h2>
+
+<ul>
+<li>Lost packets</li>
+<li>Malformed packets</li>
+<li>Delay (as sum of delays compared to the first packet)</li>
+<li>Jitter (max and avg)</li>
+<li>consensus on Symbol and Price (not analyzed automatically, just shown)
+Those parameters are (arbitrary) scored and two best senders are selected.
+<h2>Input:</h2></li>
+</ul>
+
+<p>The tool requires a PCAP file. PCAP file should contain only the relevant packets, be continuous in time. It is assumed that senders send data with constant frequency (otherwise jitter analysis doesn't make sense)</p>
+
+<h2>Output:</h2>
+
+<p>resulting HTML is saved in the subdirectory of output directory</p>
+
+<h2>Environment variables:</h2>
+
+<pre><code>* UPLOADS - where to store PCAP files, by default /tmp
+* OUTPUTS - directory for reports, no default
+</code></pre>
+
+<h2>Requiremens: python3, moduels in requirements.txt</h2>
+
+<h2>TODO:</h2>
+
+<ul>
+<li>error handling</li>
+<li>consensus analysis</li>
+<li>think more about jitter</li>
+</ul>

@@ -10,7 +10,7 @@ from classes import DataPoint, SenderMaker,  Parser
 
 app=Flask(__name__) 
 app.debug=os.environ.get('APP_DEBUG', False)
-app.config['UPLOAD_FOLDER']=os.environ.get('UPLOADS')
+app.config['UPLOAD_FOLDER']=os.environ.get('UPLOADS', '/tmp')
 app.config['OUTPUT_FOLDER']=os.environ.get('OUTPUTS')
 
 @app.route('/', methods=['GET', 'POST'])
