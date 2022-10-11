@@ -1,0 +1,105 @@
+{% extends 'base.html' %} 
+{% block body %} 
+
+<div class="row"><div class="col"><h2>Selection of data lines</h2>
+<h3>Assignment for A.Kovalev</h3></div></div>
+
+{% if error %} 
+<div class="alert alert-danger"> {{error}} </div>
+{%endif%}
+
+{% if mode=='upload' %} 
+<div class="row" >
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h5>Please upload PCAP file</h5>
+                <strong>Assumptions:</strong>
+                <ul>
+                    <li>PCAP file is valid</li>
+                    <li>It contains only UDP packets addressed to our receiver</li>
+                    <li>File is continous in time</li>
+                    <li>Senders are sending packets with regular intervals (or jitter calculation will be meaningless)</li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <form  method = "POST" 
+                enctype = "multipart/form-data">
+                <input type = "file" name = "file" accept=".pcap, .cap" />
+                <input type = "submit"/>
+             </form>
+            </div>
+        </div>
+    </div>
+</div>
+{%else%}
+
+<div class="row" >
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                <h5>Sender evaluation results</h5>
+                {% if consensus %} 
+                <div class="alert alert-danger">
+                    Consensus errors detected 
+                    {%for c in consensus%} 
+                {{c}} 
+                {%endfor%} </div>
+                {%else%} 
+                <div class="alert alert-info">
+                    No consensus errors detected
+                </div>
+                {%endif%}
+                This report is available at {{outdir}}
+                </div>
+            <h6> Senders to keep</h6>
+                    <ul>
+                {% for s in best_senders %} 
+                <li>{{s.addr}}</li>
+                {%endfor%}
+
+                    </ul>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                        <th>Sender address</th>
+                        <th>Lost packets</th>
+                        <th>Malformed packets</th>
+                        <th>Delay from first packet</th> 
+                        <th>Max jitter</th>
+                        <th>Avg jitter</th>
+                        <th>Score</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for sender in senders %}
+                        <tr>
+                            <th>{{sender.addr}}</th>
+                            <td>{{sender.missing}}</td>
+                            <td>{{sender.malformed}}</td>
+                            <td>{{sender.accdelay}}</td>
+                            <td>{{sender.maxjitter}}</td>
+                            <td>{{sender.avgjitter}}</td>
+                            <th>{{sender.score|int}}</th>
+                           
+
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+            </div>
+            {% for label, c in charts %} 
+            <div class="card-header"><h5>{{label}}</h5></div> 
+            <div class="card-body"><img src="{{c}}"></div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+
+{%endif%}
+
+{% endblock %}
